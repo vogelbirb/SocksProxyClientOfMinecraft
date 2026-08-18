@@ -4,19 +4,25 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.ServerConfig;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.texture.PlayerSkinTexture;
+import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
-@Mixin(PlayerSkinTexture.class)
+@Mixin(Minecraft.class)
 public class PlayerSkinTextureMixin {
-    @Redirect(method = "method_22801", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getNetworkProxy()Ljava/net/Proxy;"))
-    private Proxy redirectedGet(MinecraftClient instance) {
+    @ModifyArg(
+            method = "<init>",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/renderer/texture/SkinTextureDownloader;<init>(Ljava/net/Proxy;Lnet/minecraft/client/renderer/texture/TextureManager;Ljava/util/concurrent/Executor;)V"
+            ),
+            index = 0
+    )
+    private Proxy redirectedGet(Proxy instance) {
         return HttpProxyUtils.getProxyObject(ServerConfig.shouldProxyPlayerSkinDownload());
     }
 }

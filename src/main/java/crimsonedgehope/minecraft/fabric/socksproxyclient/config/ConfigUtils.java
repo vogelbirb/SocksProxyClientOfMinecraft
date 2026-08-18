@@ -1,14 +1,14 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxyClientConfigEntry;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConfigUtils {
+
+    private ConfigUtils() {
+    }
 
     public static <C extends SocksProxyClientConfig> C getConfigInstance(final Class<C> clazz) throws Exception {
         Field field = clazz.getDeclaredField("INSTANCE");

@@ -6,7 +6,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import dev.isxander.yacl3.api.ConfigCategory;
 import dev.isxander.yacl3.api.Option;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 final class MiscellaneousCategory extends YACLCategory<MiscellaneousConfig> {
 
@@ -21,7 +21,7 @@ final class MiscellaneousCategory extends YACLCategory<MiscellaneousConfig> {
     public ConfigCategory buildConfigCategory() throws Exception {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder();
 
-        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS));
+        categoryBuilder.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS));
 
         buttonsInMultiplayerScreen = entryField("buttonsInMultiplayerScreen", Boolean.class);
         Option<Boolean> yaclButtonsInMultiplayerScreen = Option.<Boolean>createBuilder()

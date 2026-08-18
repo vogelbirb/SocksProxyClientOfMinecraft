@@ -2,8 +2,6 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.Credential;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
-import lombok.Getter;
-import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.apache.commons.lang3.Validate;
@@ -15,14 +13,10 @@ import java.net.Proxy;
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-@Getter
 public class ProxyEntry {
     private Proxy proxy;
-    @NotNull @Setter
-    private SocksVersion version;
-
-    @NotNull @Setter
-    private Credential credential;
+    @NotNull private SocksVersion version;
+    @NotNull private Credential credential;
 
     public ProxyEntry(@NotNull SocksVersion version, InetSocketAddress sa) {
         this(version, sa, null, null);
@@ -41,6 +35,28 @@ public class ProxyEntry {
     public void setProxy(Proxy proxy) {
         this.proxy = proxy;
         Validate.isTrue(proxy.type().equals(Proxy.Type.SOCKS));
+    }
+
+    public Proxy getProxy() {
+        return this.proxy;
+    }
+
+    @NotNull
+    public SocksVersion getVersion() {
+        return this.version;
+    }
+
+    public void setVersion(@NotNull SocksVersion version) {
+        this.version = version;
+    }
+
+    @NotNull
+    public Credential getCredential() {
+        return this.credential;
+    }
+
+    public void setCredential(@NotNull Credential credential) {
+        this.credential = credential;
     }
 
     @Override

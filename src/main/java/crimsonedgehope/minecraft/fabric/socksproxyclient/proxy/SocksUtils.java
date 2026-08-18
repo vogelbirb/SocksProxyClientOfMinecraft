@@ -9,13 +9,11 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.proxy.Socks4ProxyHandler;
 import io.netty.handler.proxy.Socks5ProxyHandler;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.toast.SystemToast;
-import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.toasts.SystemToast;
+import net.minecraft.network.chat.Component;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.MutablePair;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -32,8 +30,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SocksUtils {
+    private SocksUtils() {
+    }
     public static void apply(
             @NotNull ChannelPipeline pipeline,
             @NotNull List<ProxyEntry> entries
@@ -62,22 +61,22 @@ public final class SocksUtils {
     }
 
     public static void testReachability(final String target) {
-        final CompletableFuture<Pair<Boolean, Throwable>> test = CompletableFuture.supplyAsync(() -> {
+        final CompletableFuture<MutablePair<Boolean, Throwable>> test = CompletableFuture.supplyAsync(() -> {
             try {
                 URL url = URI.create(target).toURL();
                 final Proxy httpProxy = HttpProxyUtils.getProxyObject(true);
                 if (httpProxy.equals(Proxy.NO_PROXY)) {
                     SocksProxyClientConfig.LOGGER.warn("No proxy to test.");
-                    return new Pair<>(true, null);
+                    return new MutablePair<>(true, null);
                 }
 
                 final HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection(httpProxy);
                 SocksProxyClientConfig.LOGGER.info("Testing connection to {}", target);
-                MinecraftClient.getInstance().submit(() -> {
-                    SystemToast.show(MinecraftClient.getInstance().getToastManager(),
-                            new SystemToast.Type(),
-                            Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TESTING),
-                            Text.literal(target));
+                Minecraft.getInstance().submit(() -> {
+                    SystemToast.add(Minecraft.getInstance().gui.toastManager(),
+                            SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                            Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TESTING),
+                            Component.literal(target));
                 });
                 urlConnection.setConnectTimeout(com.mojang.authlib.minecraft.client.MinecraftClient.CONNECT_TIMEOUT_MS);
                 urlConnection.setReadTimeout(com.mojang.authlib.minecraft.client.MinecraftClient.READ_TIMEOUT_MS);
@@ -99,20 +98,21 @@ public final class SocksUtils {
                     SocksProxyClientConfig.LOGGER.warn("{} is not responding.", target);
                 }
             } catch (JsonSyntaxException e) {
-                return new Pair<>(false, new RuntimeException(target + " sent back no json.", e));
+                return new MutablePair<>(false, new RuntimeException(target + " sent back no json.", e));
             } catch (IOException e) {
-                return new Pair<>(false, new RuntimeException("IO failure!!", e));
+                return new MutablePair<>(false, new RuntimeException("IO failure!!", e));
             }
-            return new Pair<>(true, null);
+            return new MutablePair<>(true, null);
         });
         final CompletableFuture<Void> res = test.thenApplyAsync(v -> {
-            MinecraftClient.getInstance().submit(() -> {
-                MinecraftClient.getInstance().getToastManager().add(
-                        new SystemToast(new SystemToast.Type(3000L),
-                                Text.translatable(v.getLeft()
-                                        ? TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_SUCCESS
-                                        : TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_FAILURE
-                                ), Text.literal(target)));
+            Minecraft.getInstance().submit(() -> {
+                SystemToast.add(Minecraft.getInstance().gui.toastManager(),
+                        SystemToast.SystemToastId.PERIODIC_NOTIFICATION,
+                        Component.translatable(v.getLeft()
+                                ? TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_SUCCESS
+                                : TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_FAILURE
+                        ),
+                        Component.literal(target));
             });
             if (v.getLeft()) {
                 return null;

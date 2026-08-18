@@ -1,23 +1,21 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.yacl;
 
 import dev.isxander.yacl3.api.YetAnotherConfigLib;
-import lombok.Getter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.text.Text;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 
 import java.util.Objects;
 
 @Environment(EnvType.CLIENT)
-@Getter
 final class YACLAccess {
     private final Screen parentScreen;
     private final YetAnotherConfigLib.Builder configBuilder;
     private YetAnotherConfigLib yacl;
     private Screen generatedScreen;
 
-    YACLAccess(Screen parentScreen, Text title) {
+    YACLAccess(Screen parentScreen, Component title) {
         this.parentScreen = parentScreen;
         this.configBuilder = YetAnotherConfigLib.createBuilder().title(title);
     }
@@ -34,5 +32,21 @@ final class YACLAccess {
             generatedScreen = buildYacl().generateScreen(parentScreen);
         }
         return generatedScreen;
+    }
+
+    public Screen getParentScreen() {
+        return this.parentScreen;
+    }
+
+    public YetAnotherConfigLib.Builder getConfigBuilder() {
+        return this.configBuilder;
+    }
+
+    public YetAnotherConfigLib getYacl() {
+        return this.yacl;
+    }
+
+    public Screen getGeneratedScreen() {
+        return this.generatedScreen;
     }
 }

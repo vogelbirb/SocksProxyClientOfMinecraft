@@ -1,31 +1,28 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.config.SocksProxyClientConfig;
-import lombok.Getter;
-import lombok.Setter;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.MutableText;
+import net.minecraft.network.chat.MutableComponent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(EnvType.CLIENT)
-@Getter
 public class SocksProxyClientConfigEntry<T> {
     @NotNull private final Class<? extends SocksProxyClientConfig> configClass;
 
     @NotNull private final String jsonEntry;
 
     @Nullable private final T defaultValue;
-    @Setter @Nullable private T value;
+    @Nullable private T value;
 
-    @NotNull private final MutableText entryTranslateKey;
-    @Nullable private final MutableText descriptionTranslateKey;
+    @NotNull private final MutableComponent entryTranslateKey;
+    @Nullable private final MutableComponent descriptionTranslateKey;
 
     public SocksProxyClientConfigEntry(
             @NotNull Class<? extends SocksProxyClientConfig> configClass,
             @NotNull String jsonEntry,
-            @NotNull MutableText entryTranslateKey,
+            @NotNull MutableComponent entryTranslateKey,
             @Nullable T defaultValue
     ) {
         this(configClass, jsonEntry, entryTranslateKey, null, defaultValue);
@@ -34,8 +31,8 @@ public class SocksProxyClientConfigEntry<T> {
     public SocksProxyClientConfigEntry(
             @NotNull Class<? extends SocksProxyClientConfig> configClass,
             @NotNull String jsonEntry,
-            @NotNull MutableText entryTranslateKey,
-            @Nullable MutableText descriptionTranslateKey,
+            @NotNull MutableComponent entryTranslateKey,
+            @Nullable MutableComponent descriptionTranslateKey,
             @Nullable T defaultValue
     ) {
         this.configClass = configClass;
@@ -44,5 +41,33 @@ public class SocksProxyClientConfigEntry<T> {
         this.descriptionTranslateKey = descriptionTranslateKey;
         this.defaultValue = defaultValue;
         this.value = this.defaultValue;
+    }
+
+    public Class<? extends SocksProxyClientConfig> getConfigClass() {
+        return this.configClass;
+    }
+
+    public String getJsonEntry() {
+        return this.jsonEntry;
+    }
+
+    public T getDefaultValue() {
+        return this.defaultValue;
+    }
+
+    public T getValue() {
+        return this.value;
+    }
+
+    public MutableComponent getEntryTranslateKey() {
+        return this.entryTranslateKey;
+    }
+
+    public MutableComponent getDescriptionTranslateKey() {
+        return this.descriptionTranslateKey;
+    }
+
+    public void setValue(@Nullable T value) {
+        this.value = value;
     }
 }

@@ -11,7 +11,7 @@ import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
 import dev.isxander.yacl3.api.controller.EnumControllerBuilder;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 
 final class ServerCategory extends YACLCategory<ServerConfig> {
 
@@ -37,8 +37,8 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
     public ConfigCategory buildConfigCategory() throws Exception {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder();
 
-        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER))
-                .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_TOOLTIP));
+        categoryBuilder.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER))
+                .tooltip(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_TOOLTIP));
 
         proxyMinecraft = entryField("proxyMinecraft", Boolean.class);
         Option<Boolean> yaclProxyMinecraft = Option.<Boolean>createBuilder()
@@ -50,7 +50,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         categoryBuilder.option(yaclProxyMinecraft);
 
         OptionGroup.Builder groupMinecraftServerDomainName = OptionGroup.createBuilder();
-        groupMinecraftServerDomainName.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION));
+        groupMinecraftServerDomainName.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_MINECRAFTDOMAINNAMERESOLUTION));
 
         minecraftDomainNameResolutionUseProxy = entryField("minecraftDomainNameResolutionUseProxy", Boolean.class);
         Option<Boolean> yaclMinecraftDomainNameResolutionUseProxy = Option.<Boolean>createBuilder()
@@ -74,7 +74,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         Option<DOHProvider> yaclMinecraftDomainNameResolutionDohProvider = Option.<DOHProvider>createBuilder()
                 .name(minecraftDomainNameResolutionDohProvider.getEntryTranslateKey())
                 .binding(minecraftDomainNameResolutionDohProvider.getDefaultValue(), minecraftDomainNameResolutionDohProvider::getValue, minecraftDomainNameResolutionDohProvider::setValue)
-                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).formatValue(v -> Text.literal(v.displayName)))
+                .controller(opt -> EnumControllerBuilder.create(opt).enumClass(DOHProvider.class).formatValue(v -> Component.literal(v.displayName)))
                 .available(proxyMinecraft.getValue())
                 .build();
 
@@ -101,7 +101,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         categoryBuilder.group(groupMinecraftServerDomainName.build());
 
         OptionGroup.Builder groupServices = OptionGroup.createBuilder();
-        groupServices.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES));
+        groupServices.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_SERVICES));
 
         proxyYggdrasil = entryField("proxyYggdrasil", Boolean.class);
         Option<Boolean> yaclProxyYggdrasil = Option.<Boolean>createBuilder()
@@ -148,7 +148,7 @@ final class ServerCategory extends YACLCategory<ServerConfig> {
         categoryBuilder.group(groupServices.build());
 
         OptionGroup.Builder groupAdvanced = OptionGroup.createBuilder().collapsed(true);
-        groupAdvanced.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_ADVANCED));
+        groupAdvanced.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_SERVER_ADVANCED));
 
         imposeProxyOnMinecraftLoopback = entryField("imposeProxyOnMinecraftLoopback", Boolean.class);
         Option<Boolean> yaclImposeProxyOnMinecraftLoopback = Option.<Boolean>createBuilder()

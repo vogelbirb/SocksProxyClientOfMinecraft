@@ -19,7 +19,6 @@
     "netty.ProxyHandlerMixin",
     "netty.Socks4ProxyHandlerMixin",
     "netty.Socks5ProxyHandlerMixin",
-    "network.AllowedAddressResolverMixin",
     "network.ClientConnectionMixin",
     "network.ClientConnectionMixinInner",
     "network.MultiplayerServerListPingerMixin",

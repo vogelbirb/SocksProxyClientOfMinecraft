@@ -15,8 +15,8 @@ import dev.isxander.yacl3.api.OptionDescription;
 import dev.isxander.yacl3.api.OptionFlag;
 import dev.isxander.yacl3.api.OptionGroup;
 import dev.isxander.yacl3.api.controller.BooleanControllerBuilder;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
+import net.minecraft.client.Minecraft;
+import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
@@ -33,8 +33,8 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
     public ConfigCategory buildConfigCategory() throws Exception {
         ConfigCategory.Builder categoryBuilder = ConfigCategory.createBuilder();
 
-        categoryBuilder.name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL))
-                .tooltip(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_TOOLTIP));
+        categoryBuilder.name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL))
+                .tooltip(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_TOOLTIP));
 
         useProxy = entryField("useProxy", Boolean.class);
         Option<Boolean> yaclUseProxy = Option.<Boolean>createBuilder()
@@ -46,7 +46,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         categoryBuilder.option(yaclUseProxy);
 
         OptionGroup.Builder proxyGroupBuilder = OptionGroup.createBuilder()
-                .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
+                .name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY));
 
         proxies = entryField("proxies", List.class);
         ListOption<ProxyEntry> yaclProxies = ListOption.<ProxyEntry>createBuilder()
@@ -56,7 +56,7 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
                 .binding((List<ProxyEntry>) proxies.getDefaultValue(), proxies::getValue, proxies::setValue)
                 .collapsed(false)
                 .controller(opt -> ProxyEntryControllerBuilder.create((Option<ProxyEntry>) opt).action((screen, entry, callback) -> {
-                    MinecraftClient.getInstance().setScreen(new ProxyEntryEditScreen(screen, entry, callback));
+                    Minecraft.getInstance().setScreenAndShow(new ProxyEntryEditScreen(screen, entry, callback));
                 }))
                 .insertEntriesAtEnd(true)
                 .flag(OptionFlag.GAME_RESTART)
@@ -66,8 +66,8 @@ final class GeneralCategory extends YACLCategory<GeneralConfig> {
         categoryBuilder.group(yaclProxies);
 
         ButtonOption yaclTestReachability = ButtonOption.createBuilder()
-                .name(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST))
-                .description(OptionDescription.of(Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
+                .name(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST))
+                .description(OptionDescription.of(Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_TEST_TOOLTIP)))
                 .available(true)
                 .action((screen, opt) -> SocksUtils.testReachability())
                 .available(useProxy.getValue())

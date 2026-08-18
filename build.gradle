@@ -4,9 +4,8 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.gradle.Tasks
 import java.nio.file.Paths
 
 plugins {
-	id "fabric-loom" version "1.8-SNAPSHOT"
+	id "net.fabricmc.fabric-loom" version "1.17-SNAPSHOT"
 	id "java-library"
-	id "com.github.johnrengelman.shadow" version "8.1.1"
 	id "org.jetbrains.changelog" version "2.2.0"
 	id "com.modrinth.minotaur" version "2.8.7"
 	id "com.matthewprenger.cursegradle" version "1.4.0"
@@ -23,24 +22,13 @@ base {
 }
 
 java {
-	sourceCompatibility = JavaVersion.VERSION_21
-	targetCompatibility = JavaVersion.VERSION_21
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 21
+	it.options.release = 25
 	it.options.encoding = "UTF-8"
-}
-
-shadowJar {
-	configurations = [ project.configurations.shadow ]
-	archiveClassifier.set("SHADOW")
-}
-
-remapJar {
-	dependsOn(shadowJar)
-	inputFile = tasks.shadowJar.archiveFile
-	archiveClassifier.set("SNAPSHOT")
 }
 
 repositories {
@@ -51,18 +39,17 @@ repositories {
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.fabricloader_version}"
-	modApi("com.terraformersmc:modmenu:${project.modmenu_version}") {
+	implementation "net.fabricmc:fabric-loader:${project.fabricloader_version}"
+	implementation("com.terraformersmc:modmenu:${project.modmenu_version}") {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	modApi("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.yacl_fabric}") {
+	implementation("dev.isxander:yet-another-config-lib:${project.yacl_version}+${project.yacl_fabric}") {
 		exclude(group: "net.fabricmc")
 		exclude(group: "net.fabricmc.fabric-api")
 	}
-	shadow(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
-	shadow(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
+	include(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
+	include(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
 
@@ -157,7 +144,7 @@ modrinth {
 	versionNumber = version
 	versionName = modrinth_versionName
 	versionType = releaseType
-	uploadFile = tasks.remapJar.archiveFile
+	uploadFile = tasks.named("jar")
 	gameVersions = modrinth_gameVersions
 	loaders = modrinth_loaders
 	changelog = "See changelog at " +

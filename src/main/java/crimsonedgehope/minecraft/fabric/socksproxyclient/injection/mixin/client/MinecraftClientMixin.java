@@ -3,7 +3,7 @@ package crimsonedgehope.minecraft.fabric.socksproxyclient.injection.mixin.client
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.HttpProxyUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.Minecraft;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,18 +15,18 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import java.net.Proxy;
 
 @Environment(EnvType.CLIENT)
-@Mixin(MinecraftClient.class)
+@Mixin(Minecraft.class)
 public class MinecraftClientMixin {
     @Mutable
-    @Shadow @Final private Proxy networkProxy;
+    @Shadow @Final private Proxy proxy;
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.PUTFIELD))
-    private void redirectedPut(MinecraftClient instance, Proxy value) {
-        this.networkProxy = HttpProxyUtils.getProxyObject();
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;proxy:Ljava/net/Proxy;", opcode = Opcodes.PUTFIELD))
+    private void redirectedPut(Minecraft instance, Proxy value) {
+        this.proxy = HttpProxyUtils.getProxyObject();
     }
 
-    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/MinecraftClient;networkProxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD))
-    private Proxy redirectedGet(MinecraftClient instance) {
+    @Redirect(method = "<init>", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;proxy:Ljava/net/Proxy;", opcode = Opcodes.GETFIELD))
+    private Proxy redirectedGet(Minecraft instance) {
         return HttpProxyUtils.getProxyObject();
     }
 }

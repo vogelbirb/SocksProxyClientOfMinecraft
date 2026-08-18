@@ -33,7 +33,6 @@ import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
-import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
@@ -41,7 +40,6 @@ import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-@Getter
 public class HttpProxy {
 
     public static final HttpProxy INSTANCE;
@@ -68,6 +66,22 @@ public class HttpProxy {
     public HttpProxy(String host, int port) {
         this.host = host;
         this.port = port;
+    }
+
+    public String getHost() {
+        return this.host;
+    }
+
+    public int getPort() {
+        return this.port;
+    }
+
+    public Channel getChannel() {
+        return this.channel;
+    }
+
+    public boolean isFired() {
+        return this.fired;
     }
 
     public void fire() {

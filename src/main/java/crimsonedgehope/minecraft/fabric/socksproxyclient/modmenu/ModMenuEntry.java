@@ -59,7 +59,7 @@ public final class ModMenuEntry implements ModMenuApi {
                 }
                 JsonObject jsonObject = new Gson().fromJson(response.body(), JsonObject.class);
                 JsonObject gameVersions = jsonObject.get("versions").getAsJsonObject();
-                String gameVersion = SharedConstants.getGameVersion().getName();
+                String gameVersion = SharedConstants.getCurrentVersion().name();
                 if (!gameVersions.has(gameVersion)) {
                     LOGGER.debug("No version found for {}", gameVersion);
                     return null;

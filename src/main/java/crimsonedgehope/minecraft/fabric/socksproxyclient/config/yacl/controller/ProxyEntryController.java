@@ -8,10 +8,12 @@ import dev.isxander.yacl3.api.utils.Dimension;
 import dev.isxander.yacl3.gui.AbstractWidget;
 import dev.isxander.yacl3.gui.YACLScreen;
 import dev.isxander.yacl3.gui.controllers.ControllerWidget;
-import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.ApiStatus;
+import org.lwjgl.glfw.GLFW;
 
 import java.net.InetSocketAddress;
 
@@ -34,9 +36,9 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
     }
 
     @Override
-    public Text formatValue() {
+    public Component formatValue() {
         InetSocketAddress sa = (InetSocketAddress) getEntry().getProxy().address();
-        return Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
+        return Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_EDIT,
                 getEntry().getVersion().desc, sa.getHostString() + ":" + sa.getPort());
     }
 
@@ -77,8 +79,8 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
         }
 
         @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            if (isMouseOver(mouseX, mouseY) && isAvailable()) {
+        public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+            if (isMouseOver(event.x(), event.y()) && isAvailable()) {
                 executeAction();
                 return true;
             }
@@ -86,12 +88,12 @@ public class ProxyEntryController implements Controller<ProxyEntry> {
         }
 
         @Override
-        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        public boolean keyPressed(KeyEvent event) {
             if (!focused) {
                 return false;
             }
 
-            if (keyCode == InputUtil.GLFW_KEY_ENTER || keyCode == InputUtil.GLFW_KEY_SPACE || keyCode == InputUtil.GLFW_KEY_KP_ENTER) {
+            if (event.key() == GLFW.GLFW_KEY_ENTER || event.key() == GLFW.GLFW_KEY_SPACE || event.key() == GLFW.GLFW_KEY_KP_ENTER) {
                 executeAction();
                 return true;
             }

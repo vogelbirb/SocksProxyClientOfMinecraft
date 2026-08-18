@@ -10,7 +10,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import crimsonedgehope.minecraft.fabric.socksproxyclient.proxy.SocksVersion;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 
 import java.net.InetSocketAddress;
@@ -33,11 +33,11 @@ public final class GeneralConfig extends SocksProxyClientConfig {
 
     private static final SocksProxyClientConfigEntry<Boolean> useProxy =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "useProxy",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_USEPROXY), false);
+                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_USEPROXY), false);
     private static final SocksProxyClientConfigEntry<List<ProxyEntry>> proxies =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "proxies",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES),
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES_TOOLTIP),
+                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES),
+                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXIES_TOOLTIP),
                     new ArrayList<>() {{
                         add(new ProxyEntry(SocksVersion.SOCKS5, new InetSocketAddress("localhost", 1080)));
                     }});

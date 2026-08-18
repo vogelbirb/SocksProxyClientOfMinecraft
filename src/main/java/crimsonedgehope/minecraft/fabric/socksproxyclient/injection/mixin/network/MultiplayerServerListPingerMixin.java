@@ -11,18 +11,18 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.network.MultiplayerServerListPinger;
+import net.minecraft.client.multiplayer.ServerStatusPinger;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 
-@Mixin(MultiplayerServerListPinger.class)
+@Mixin(ServerStatusPinger.class)
 @Environment(EnvType.CLIENT)
 public class MultiplayerServerListPingerMixin {
 
-    @WrapOperation(method = "ping",
+    @WrapOperation(method = "pingLegacyServer",
             at = @At(
                     value = "INVOKE",
                     target = "Lio/netty/bootstrap/Bootstrap;connect(Ljava/net/InetAddress;I)Lio/netty/channel/ChannelFuture;",

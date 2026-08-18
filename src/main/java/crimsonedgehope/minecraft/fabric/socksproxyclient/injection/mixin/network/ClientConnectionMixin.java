@@ -5,7 +5,8 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.injection.access.IClien
 import io.netty.channel.ChannelFuture;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.ClientConnection;
+import net.minecraft.network.Connection;
+import net.minecraft.server.network.EventLoopGroupHolder;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.net.InetSocketAddress;
 
 @Environment(EnvType.CLIENT)
-@Mixin(ClientConnection.class)
+@Mixin(Connection.class)
 public class ClientConnectionMixin implements IClientConnectionMixin {
     @Unique
     private InetSocketAddress remote;
@@ -31,10 +32,10 @@ public class ClientConnectionMixin implements IClientConnectionMixin {
     }
 
     @Inject(
-            method = "connect(Ljava/net/InetSocketAddress;ZLnet/minecraft/network/ClientConnection;)Lio/netty/channel/ChannelFuture;",
+            method = "connect(Ljava/net/InetSocketAddress;Lnet/minecraft/server/network/EventLoopGroupHolder;Lnet/minecraft/network/Connection;)Lio/netty/channel/ChannelFuture;",
             at = @At("HEAD")
     )
-    private static void injected(InetSocketAddress address, boolean useEpoll, ClientConnection connection, CallbackInfoReturnable<ChannelFuture> cir) {
+    private static void injected(InetSocketAddress address, EventLoopGroupHolder eventLoopGroupHolder, Connection connection, CallbackInfoReturnable<ChannelFuture> cir) {
         ((IClientConnectionMixin) connection).socksProxyClient$setInetSocketAddress(address);
         SocksProxyClient.logger("Connect").debug("Remote Minecraft server {}", address);
     }

@@ -1,13 +1,13 @@
 package crimsonedgehope.minecraft.fabric.socksproxyclient.proxy;
 
 import crimsonedgehope.minecraft.fabric.socksproxyclient.SocksProxyClient;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 
 import java.net.Proxy;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class HttpProxyUtils {
+
+    private HttpProxyUtils() {
+    }
 
     public static Proxy getProxyObject() {
         return getProxyObject(true);

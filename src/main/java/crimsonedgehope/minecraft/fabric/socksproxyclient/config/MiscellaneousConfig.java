@@ -6,7 +6,7 @@ import crimsonedgehope.minecraft.fabric.socksproxyclient.config.entry.SocksProxy
 import crimsonedgehope.minecraft.fabric.socksproxyclient.i18n.TranslateKeys;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.text.Text;
+import net.minecraft.network.chat.Component;
 import org.slf4j.Logger;
 
 @Environment(EnvType.CLIENT)
@@ -24,11 +24,11 @@ public final class MiscellaneousConfig extends SocksProxyClientConfig {
 
     private static final SocksProxyClientConfigEntry<Boolean> buttonsInMultiplayerScreen =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "buttonsInMultiplayerScreen",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_BUTTONINMULTIPLAYERSCREEN),
+                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_BUTTONINMULTIPLAYERSCREEN),
                     true);
     private static final SocksProxyClientConfigEntry<Boolean> checkUpdates =
             new SocksProxyClientConfigEntry<>(INSTANCE.getClass(), "checkUpdates",
-                    Text.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_CHECKUPDATES),
+                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_MISCELLANEOUS_CHECKUPDATES),
                     true);
 
     private MiscellaneousConfig() {
