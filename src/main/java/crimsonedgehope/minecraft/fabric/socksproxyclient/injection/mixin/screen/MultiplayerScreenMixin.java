@@ -8,39 +8,40 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.layouts.LayoutElement;
-import net.minecraft.client.gui.layouts.LinearLayout;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.chat.Component;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Environment(EnvType.CLIENT)
 @Mixin(JoinMultiplayerScreen.class)
-public class MultiplayerScreenMixin {
-    @Redirect(
-            method = "init",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/layouts/LinearLayout;addChild(Lnet/minecraft/client/gui/layouts/LayoutElement;)Lnet/minecraft/client/gui/layouts/LayoutElement;",
-                    ordinal = 2
-            )
-    )
-    private LayoutElement injected(LinearLayout row, LayoutElement element) {
-        row.addChild(element);
-        if (MiscellaneousConfig.showButtonsInMultiplayerScreen()) {
-            row.addChild(Button.builder(
-                    Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_SCREEN_CONFIG),
-                    button -> {
-                        try {
-                            Minecraft.getInstance().setScreenAndShow(YACLConfigScreen.getScreen((JoinMultiplayerScreen) (Object) this));
-                        } catch (Exception e) {
-                            SocksProxyClient.logger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
-                            button.active = false;
-                        }
-                    }).width(98).build());
+public abstract class MultiplayerScreenMixin {
+    @Unique
+    private static final int CONFIG_BUTTON_WIDTH = 98;
+    @Unique
+    private static final int CONFIG_BUTTON_MARGIN = 6;
+
+    @Inject(method = "init", at = @At("TAIL"))
+    private void socksProxyClient$addConfigButton(CallbackInfo ci) {
+        if (!MiscellaneousConfig.showButtonsInMultiplayerScreen()) {
+            return;
         }
-        return element;
+        int screenWidth = Minecraft.getInstance().getWindow().getGuiScaledWidth();
+        Button configButton = Button.builder(
+                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_SCREEN_CONFIG),
+                button -> {
+                    try {
+                        Minecraft.getInstance().setScreenAndShow(YACLConfigScreen.getScreen((JoinMultiplayerScreen) (Object) this));
+                    } catch (Exception e) {
+                        SocksProxyClient.logger(this.getClass().getSimpleName()).error("Where's my config screen?", e);
+                        button.active = false;
+                    }
+                })
+                .bounds(screenWidth - CONFIG_BUTTON_WIDTH - CONFIG_BUTTON_MARGIN, CONFIG_BUTTON_MARGIN, CONFIG_BUTTON_WIDTH, 20)
+                .build();
+        ((ScreenAccessor) this).invokeAddRenderableWidget(configButton);
     }
 }
