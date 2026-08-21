@@ -56,14 +56,14 @@ public class ProxyEntryEditScreen extends Screen {
         this.usernameField = new EditBox(this.font, this.width / 2 - 100, 86, 200, 20,
                 Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME));
         this.usernameField.setMaxLength(255);
-        this.usernameField.setValue(Objects.isNull(entry) ? "" : entry.getCredential().getUsername());
+        this.usernameField.setValue(Objects.isNull(entry) ? "" : Objects.toString(entry.getCredential().getUsername(), ""));
         this.usernameField.setResponder(s -> updateSetButton());
         this.addWidget(this.usernameField);
 
         this.passwordField = new EditBox(this.font, this.width / 2 - 100, 126, 200, 20,
                 Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD));
         this.passwordField.setMaxLength(255);
-        this.passwordField.setValue(Objects.isNull(entry) ? "" : entry.getCredential().getPassword());
+        this.passwordField.setValue(Objects.isNull(entry) ? "" : Objects.toString(entry.getCredential().getPassword(), ""));
         this.passwordField.setResponder(s -> updateSetButton());
         this.addWidget(this.passwordField);
 
