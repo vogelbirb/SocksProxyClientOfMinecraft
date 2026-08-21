@@ -49,6 +49,7 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	include(implementation("io.netty:netty-handler-proxy:${project.ext.netty_version}"))
+	include(implementation("io.netty:netty-codec-socks:${project.ext.netty_version}"))
 	include(implementation("dnsjava:dnsjava:${project.ext.dnsjava_version}") {
 		exclude(group: "org.slf4j")
 	})
