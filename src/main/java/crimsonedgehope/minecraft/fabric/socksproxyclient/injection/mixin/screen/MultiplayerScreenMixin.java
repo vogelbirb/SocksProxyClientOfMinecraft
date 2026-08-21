@@ -41,6 +41,6 @@ public class MultiplayerScreenMixin {
                         }
                     }).width(98).build());
         }
-        return row;
+        return element;
     }
 }
