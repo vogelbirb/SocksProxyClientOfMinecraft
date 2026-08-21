@@ -24,7 +24,14 @@ public class MultiplayerScreenMixin {
     @Shadow @Final
     private HeaderAndFooterLayout layout;
 
-    @Inject(method = "init", at = @At("TAIL"))
+    @Inject(
+            method = "init",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/layouts/HeaderAndFooterLayout;visitWidgets(Ljava/util/function/Consumer;)V",
+                    shift = At.Shift.BEFORE
+            )
+    )
     private void injected(CallbackInfo ci) {
         if (!MiscellaneousConfig.showButtonsInMultiplayerScreen()) {
             return;
