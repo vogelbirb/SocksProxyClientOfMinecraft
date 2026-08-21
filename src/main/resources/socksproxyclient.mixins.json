@@ -20,6 +20,7 @@
     "network.ClientConnectionMixin",
     "network.ClientConnectionMixinInner",
     "network.MultiplayerServerListPingerMixin",
+    "network.ServerNameResolverMixin",
     "screen.MultiplayerScreenMixin",
     "screen.ScreenAccessor"
   ],

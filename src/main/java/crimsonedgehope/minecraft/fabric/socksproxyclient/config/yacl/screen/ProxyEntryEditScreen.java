@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -47,27 +46,26 @@ public class ProxyEntryEditScreen extends Screen {
 
     @Override
     protected void init() {
-        this.proxyAddressField = this.addRenderableWidget(new EditBox(this.font, this.width / 2 - 100, 46, 200, 20,
-                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS)));
+        this.proxyAddressField = new EditBox(this.font, this.width / 2 - 100, 46, 200, 20,
+                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS));
         this.proxyAddressField.setMaxLength(262);
         this.proxyAddressField.setValue(Objects.isNull(entry) ? "" : ((InetSocketAddress) entry.getProxy().address()).getHostString() + ":" + ((InetSocketAddress) entry.getProxy().address()).getPort());
         this.proxyAddressField.setResponder(s -> updateSetButton());
+        this.addWidget(this.proxyAddressField);
 
-        this.usernameField = this.addRenderableWidget(new EditBox(this.font, this.width / 2 - 100, 86, 200, 20,
-                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME)));
+        this.usernameField = new EditBox(this.font, this.width / 2 - 100, 86, 200, 20,
+                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME));
         this.usernameField.setMaxLength(255);
         this.usernameField.setValue(Objects.isNull(entry) ? "" : entry.getCredential().getUsername());
         this.usernameField.setResponder(s -> updateSetButton());
+        this.addWidget(this.usernameField);
 
-        this.passwordField = this.addRenderableWidget(new EditBox(this.font, this.width / 2 - 100, 126, 200, 20,
-                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD)));
+        this.passwordField = new EditBox(this.font, this.width / 2 - 100, 126, 200, 20,
+                Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD));
         this.passwordField.setMaxLength(255);
         this.passwordField.setValue(Objects.isNull(entry) ? "" : entry.getCredential().getPassword());
         this.passwordField.setResponder(s -> updateSetButton());
-
-        this.addRenderableOnly(new StringWidget(this.width / 2 - 100 + 1, 33, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.font));
-        this.addRenderableOnly(new StringWidget(this.width / 2 - 100 + 1, 74, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.font));
-        this.addRenderableOnly(new StringWidget(this.width / 2 - 100 + 1, 115, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.font));
+        this.addWidget(this.passwordField);
 
         this.setSocksVersionButton = this.addRenderableWidget(
                 CycleButton.<SocksVersion>builder(o -> Component.literal(o.toString()), SocksVersion.SOCKS5)
@@ -116,6 +114,13 @@ public class ProxyEntryEditScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         super.extractRenderState(context, mouseX, mouseY, delta);
+        context.centeredText(this.font, this.title, this.width / 2, 17, 16777215);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, 10526880);
+        this.proxyAddressField.extractRenderState(context, mouseX, mouseY, delta);
+        this.usernameField.extractRenderState(context, mouseX, mouseY, delta);
+        this.passwordField.extractRenderState(context, mouseX, mouseY, delta);
     }
 
     private void setAndClose() {
