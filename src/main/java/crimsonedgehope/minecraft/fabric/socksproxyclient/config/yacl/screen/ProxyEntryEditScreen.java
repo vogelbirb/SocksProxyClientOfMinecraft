@@ -114,10 +114,10 @@ public class ProxyEntryEditScreen extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         super.extractRenderState(context, mouseX, mouseY, delta);
-        context.centeredText(this.font, this.title, this.width / 2, 17, 16777215);
-        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, 10526880);
-        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, 10526880);
-        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, 10526880);
+        context.centeredText(this.font, this.title, this.width / 2, 17, -1);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PROXYADDRESS), this.width / 2 - 100 + 1, 33, -6250336);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_USERNAME), this.width / 2 - 100 + 1, 74, -6250336);
+        context.text(this.font, Component.translatable(TranslateKeys.SOCKSPROXYCLIENT_CONFIG_GENERAL_PROXY_PASSWORD), this.width / 2 - 100 + 1, 115, -6250336);
         this.proxyAddressField.extractRenderState(context, mouseX, mouseY, delta);
         this.usernameField.extractRenderState(context, mouseX, mouseY, delta);
         this.passwordField.extractRenderState(context, mouseX, mouseY, delta);
