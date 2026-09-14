@@ -1,5 +1,8 @@
 # SocksProxyClient
 
+> [!NOTE]  
+> This is a vibecoded port of the SocksProxyClient mod by [vogelbirb](https://github.com/vogelbirb), previously avalable on the [CrimsonEdgeHope/CrimsonEdgeHope](https://github.com/CrimsonEdgeHope/SocksProxyClientOfMinecraft) repo. It was taken down for unknown reasons. Feel free to open an issue if there are any bugs or missing functionality. Below this note is the unmodified README file from the last commit before the repository was deleted or made private.
+
 <h1>!!! This project won't be maintained anymore !!!</h1>
 
 Modern Minecraft Java client relies on Netty to connect to multiplayer servers,
